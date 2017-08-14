@@ -1,4 +1,5 @@
 import socket
+import getpass
 
 def Main():
 	host = '127.0.0.1' #server IP
@@ -8,6 +9,17 @@ def Main():
 	s.connect((host, port))
 	
 	print "[client] Connection Established."
+	pswd = getpass.getpass("[server] Enter Password: ")
+	s.send(pswd)
+	
+	check = s.recv(4096)
+	if check[:2] != "OK":
+		print "[server] Connection Refused."
+		print "[client] Abort."
+		quit()
+	else:
+		print "[server] Connection Accepted"
+	
 	fileName = raw_input("File Name: ")
 	
 	if fileName != 'q':

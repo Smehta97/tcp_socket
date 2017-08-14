@@ -2,8 +2,16 @@ import socket
 import threading
 import os
 import getpass
+import bcrypt
 
 def Retrieve(name, sock):
+	hashed = "$2b$12$z5YD4/WDt2BA/4Y5qHdms.udyQkZh7ujhacCd.gI50Y3gxHKP6okK"
+	pswd = sock.recv(4096)
+	if bcrypt.hashpw(pswd, hashed) == hashed:
+		sock.send("OK")
+	else:
+		sock.send("NO")
+
 	fileName = sock.recv(1024)
 	print "[server] Searching for: " + fileName
 	if os.path.isfile(fileName):
